@@ -1,4 +1,8 @@
 from flask import Flask, request, send_file, jsonify
+from barre_graph import generate_barre_in_pila
+from dispersione import generate_dispersione
+from overaly_images import overlayimages
+from pie3d_graph import generate_pie3d
 from wordcloud_graph import generate_wordcloud
 import io
 from PIL import Image
@@ -32,14 +36,55 @@ def overlay_images():
     image2 = image2.resize(image1.size)
 
     # Overlay images
-    combined_image = Image.alpha_composite(image1.convert('RGBA'), image2.convert('RGBA'))
-
-    # Save to a bytes buffer
-    img_byte_arr = io.BytesIO()
-    combined_image.save(img_byte_arr, format='PNG')
-    img_byte_arr.seek(0)
+    img_byte_arr = overlayimages(image1, image2)
 
     return send_file(img_byte_arr, mimetype='image/png')
+
+
+@app.route('/generate_barre_in_pila', methods=['POST'])
+def create_barre_in_pila():
+    data = request.json
+    print(data)
+    colors = data.get('colors', [])
+    labels = data.get('labels', [])
+    sizes = data.get('sizes', [])
+
+    try:
+        image_bytes = generate_barre_in_pila(colors, labels, sizes)
+        return send_file(io.BytesIO(image_bytes), mimetype='image/png')
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+
+@app.route('/generate_pie3d', methods=['POST'])
+def create_pie3d():
+    data = request.json
+    print(data)
+    colors = data.get('colors', [])
+    labels = data.get('labels', [])
+    sizes = data.get('sizes', [])
+    explode = data.get('explode', [])
+    title = data.get('title', '3D Pie Chart')
+
+    try:
+        image_bytes = generate_pie3d(colors, labels, sizes, explode, title)
+        return send_file(io.BytesIO(image_bytes), mimetype='image/png')
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+@app.route('/dispersione', methods=['POST'])
+def create_dispersione():
+    data = request.json
+    print(data)
+    x = data.get('x', [])
+    y = data.get('y', [])
+    labels = data.get('labels', [])
+
+    try:
+        image_bytes = generate_dispersione(x, y, labels)
+        return send_file(io.BytesIO(image_bytes), mimetype='image/png')
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080)

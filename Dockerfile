@@ -3,6 +3,9 @@ FROM python:3.9-slim
 # Set the working directory
 WORKDIR /app
 
+# Install gcc
+RUN apt-get update && apt-get install -y gcc
+
 # Copy the requirements file
 COPY requirements.txt .
 
