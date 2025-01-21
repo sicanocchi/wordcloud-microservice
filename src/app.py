@@ -3,6 +3,8 @@ from barre_graph import generate_barre_in_pila
 from dispersione import generate_dispersione
 from overaly_images import overlayimages
 from pie3d_graph import generate_pie3d
+from risk_bar import create_risk_bar_chart
+from risk_line import create_risk_line_chart
 from wordcloud_graph import generate_wordcloud
 import io
 from PIL import Image
@@ -82,6 +84,42 @@ def create_dispersione():
 
     try:
         image_bytes = generate_dispersione(x, y, labels)
+        return send_file(io.BytesIO(image_bytes), mimetype='image/png')
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+
+@app.route('/risk_bar', methods=['POST'])
+def create_risk_bar():
+    data = request.json
+    print(data)
+    categories = data.get('categories', [])
+    values = data.get('values', [])
+    groups = data.get('groups', [])
+    risk_zones = data.get('risk_zones', [])
+    risk_colors = data.get('risk_colors', [])
+    group_labels = data.get('group_labels', [])
+    legend_labels = data.get('legend_labels', [])
+
+    try:
+        image_bytes = create_risk_bar_chart(categories, values, groups, risk_zones, risk_colors, group_labels, legend_labels)
+        return send_file(io.BytesIO(image_bytes), mimetype='image/png')
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+
+@app.route('/risk_line', methods=['POST'])
+def create_risk_line():
+    data = request.json
+    print(data)
+    categories = data.get('categories', [])
+    values = data.get('values', [])
+    risk_zones = data.get('risk_zones', [])
+    risk_colors = data.get('risk_colors', [])
+    legend_labels = data.get('legend_labels', [])
+
+    try:
+        image_bytes = create_risk_line_chart(categories, values, risk_zones, risk_colors, legend_labels)
         return send_file(io.BytesIO(image_bytes), mimetype='image/png')
     except Exception as e:
         return jsonify({'error': str(e)}), 500
