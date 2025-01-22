@@ -57,28 +57,28 @@ def create_risk_bar_chart(categories, values, groups, risk_zones, risk_colors, g
                 color=colors[i]
             )
             group_patches.append(bar)
-    # Definizione delle posizioni per le barre
-    y_positions = np.arange(num_categories)
-    offsets = np.linspace(-bar_height * (len(groups) - 1) / 2, bar_height * (len(groups) - 1) / 2, len(groups))
+        # Definizione delle posizioni per le barre
+        y_positions = np.arange(num_categories)
+        offsets = np.linspace(-bar_height * (len(groups) - 1) / 2, bar_height * (len(groups) - 1) / 2, len(groups))
 
-    # Aggiungi le barre per ogni gruppo
-    for i, (group, offset) in enumerate(zip(groups, offsets)):
-        ax.barh(y_positions + offset, values[i], height=bar_height, label=group_labels[i], alpha=0.8, color=bar_colors[i])
+        # Aggiungi le barre per ogni gruppo
+        for i, (group, offset) in enumerate(zip(groups, offsets)):
+            ax.barh(y_positions + offset, values[i], height=bar_height, label=group_labels[i], alpha=0.8, color=bar_colors[i])
 
-        # Configura assi e legenda
-        ax.set_yticks(y_positions)
-        ax.set_yticklabels(categories)
-        # Prima legenda per le fasce di rischio
-        risk_legend = ax.legend(
-            handles=risk_patches, 
-            loc="upper center", 
-            bbox_to_anchor=(0.5, -0.15), 
-            ncol=len(risk_patches), 
-            title="Fasce di Rischio", 
-            frameon=False, 
-            title_fontsize='medium'
-        )    
-        ax.add_artist(risk_legend)
+            # Configura assi e legenda
+            ax.set_yticks(y_positions)
+            ax.set_yticklabels(categories)
+            # Prima legenda per le fasce di rischio
+            risk_legend = ax.legend(
+                handles=risk_patches, 
+                loc="upper center", 
+                bbox_to_anchor=(0.5, -0.15), 
+                ncol=len(risk_patches), 
+                title="Fasce di Rischio", 
+                frameon=False, 
+                title_fontsize='medium'
+            )    
+            ax.add_artist(risk_legend)
 
         # Seconda legenda per i gruppi
         # Seconda legenda per i gruppi
