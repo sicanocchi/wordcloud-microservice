@@ -35,6 +35,9 @@ def create_risk_bar_chart(categories, values, groups, risk_zones, risk_colors, g
         # Aggiungi le barre per ogni gruppo
         for i, (group, offset) in enumerate(zip(groups, offsets)):
             ax.barh(y_positions + offset, values[i], height=bar_height, label=group_labels[i], alpha=0.8, color=bar_colors[i])
+        # Aggiungi le barre per ogni gruppo
+        for i, (group, offset) in enumerate(zip(groups, offsets)):
+            ax.barh(y_positions + offset, values[i], height=bar_height, label=group_labels[i], alpha=0.8, color=bar_colors[i])
 
         group_patches = []
         for i, (group, offset) in enumerate(zip(groups, offsets)):
