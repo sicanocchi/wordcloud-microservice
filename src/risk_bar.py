@@ -28,6 +28,7 @@ def create_risk_bar_chart(categories, values, groups, risk_zones, risk_colors, g
             patch = ax.axvspan(start, end, color=risk_colors[i], label=f"Rischio: {legend_labels[i]}")
             risk_patches.append(patch)
 
+<<<<<<< Updated upstream
         # Definizione delle posizioni per le barre
         y_positions = np.arange(num_categories)
         offsets = np.linspace(-bar_height * (len(groups) - 1), bar_height * (len(groups) - 1), len(groups))    
@@ -38,6 +39,11 @@ def create_risk_bar_chart(categories, values, groups, risk_zones, risk_colors, g
         # Aggiungi le barre per ogni gruppo
         for i, (group, offset) in enumerate(zip(groups, offsets)):
             ax.barh(y_positions + offset, values[i], height=bar_height, label=group_labels[i], alpha=0.8, color=bar_colors[i])
+=======
+    # Aggiungi le barre per ogni gruppo
+    for i, (group, offset) in enumerate(zip(groups, offsets)):
+        ax.barh(y_positions + offset, values[i], height=bar_height, label=group_labels[i], alpha=0.8, color=bar_colors[i])
+>>>>>>> Stashed changes
 
         group_patches = []
         for i, (group, offset) in enumerate(zip(groups, offsets)):
