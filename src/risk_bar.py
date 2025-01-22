@@ -57,6 +57,13 @@ def create_risk_bar_chart(categories, values, groups, risk_zones, risk_colors, g
                 color=colors[i]
             )
             group_patches.append(bar)
+    # Definizione delle posizioni per le barre
+    y_positions = np.arange(num_categories)
+    offsets = np.linspace(-bar_height * (len(groups) - 1) / 2, bar_height * (len(groups) - 1) / 2, len(groups))
+
+    # Aggiungi le barre per ogni gruppo
+    for i, (group, offset) in enumerate(zip(groups, offsets)):
+        ax.barh(y_positions + offset, values[i], height=bar_height, label=group_labels[i], alpha=0.8, color=bar_colors[i])
 
         # Configura assi e legenda
         ax.set_yticks(y_positions)
