@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import io
 import numpy as np
 
-def create_risk_bar_chart(categories, values, groups, risk_zones, risk_colors, group_labels, legend_labels):
+def create_risk_bar_chart(categories, values, groups, risk_zones, risk_colors, group_labels, legend_labels, bar_colors):
     """
     Crea un grafico a barre orizzontali con fasce di rischio sullo sfondo.
 
@@ -32,6 +32,9 @@ def create_risk_bar_chart(categories, values, groups, risk_zones, risk_colors, g
         y_positions = np.arange(num_categories)
         offsets = np.linspace(-bar_height * (len(groups) - 1), bar_height * (len(groups) - 1), len(groups))    
         colors = plt.cm.Greys(np.linspace(0.2, 0.8, len(groups)))
+        # Aggiungi le barre per ogni gruppo
+        for i, (group, offset) in enumerate(zip(groups, offsets)):
+            ax.barh(y_positions + offset, values[i], height=bar_height, label=group_labels[i], alpha=0.8, color=bar_colors[i])
 
         group_patches = []
         for i, (group, offset) in enumerate(zip(groups, offsets)):

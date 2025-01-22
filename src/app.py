@@ -1,4 +1,6 @@
-from flask import Flask, request, send_file, jsonify
+import io
+from tkinter import Image
+from barre_graph import generate_barre_in_pila_stress
 from barre_graph import generate_barre_in_pila
 from dispersione import generate_dispersione
 from overaly_images import overlayimages
@@ -6,8 +8,8 @@ from pie3d_graph import generate_pie3d
 from risk_bar import create_risk_bar_chart
 from risk_line import create_risk_line_chart
 from wordcloud_graph import generate_wordcloud
-import io
-from PIL import Image
+from flask import Flask, request, jsonify, send_file
+
 
 app = Flask(__name__)
 
@@ -43,6 +45,21 @@ def overlay_images():
     return send_file(img_byte_arr, mimetype='image/png')
 
 
+@app.route('/generate_barre_in_pila_stress', methods=['POST'])
+def create_barre_in_pila_stress():
+    data = request.json
+    print(data)
+    colors = data.get('colors', [])
+    labels = data.get('labels', [])
+    sizes = data.get('sizes', [])
+
+    try:
+        image_bytes = generate_barre_in_pila_stress(colors, labels, sizes)
+        return send_file(io.BytesIO(image_bytes), mimetype='image/png')
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+
 @app.route('/generate_barre_in_pila', methods=['POST'])
 def create_barre_in_pila():
     data = request.json
@@ -56,7 +73,6 @@ def create_barre_in_pila():
         return send_file(io.BytesIO(image_bytes), mimetype='image/png')
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-    
 
 @app.route('/generate_pie3d', methods=['POST'])
 def create_pie3d():
@@ -100,9 +116,10 @@ def create_risk_bar():
     risk_colors = data.get('risk_colors', [])
     group_labels = data.get('group_labels', [])
     legend_labels = data.get('legend_labels', [])
+    bar_colors = data.get('bar_colors', [])
 
     try:
-        image_bytes = create_risk_bar_chart(categories, values, groups, risk_zones, risk_colors, group_labels, legend_labels)
+        image_bytes = create_risk_bar_chart(categories, values, groups, risk_zones, risk_colors, group_labels, legend_labels, bar_colors)
         return send_file(io.BytesIO(image_bytes), mimetype='image/png')
     except Exception as e:
         return jsonify({'error': str(e)}), 500
